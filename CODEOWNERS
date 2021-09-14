@@ -5,4 +5,6 @@
 # the repo. Unless a later match takes precedence,
 # @global-owner1 and @global-owner2 will be requested for
 # review when someone opens a pull request.
-*       @verboompj @lipinght @HasithaRachumalla @nicolalgallacher 
+*       @verboompj @lipinght @HasithaRachumalla @nicolalgallacher @Munyasya
+
+/apis/poi/ @
