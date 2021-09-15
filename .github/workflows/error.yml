@@ -18,7 +18,7 @@ jobs:
           OrganizationName: "openhackdevopst2harachum"
           PAT: "PAT"
           ProjectName: "OpenHackDevOpsT2"
-          AreaPath: "Boards\\WorkItems"
+          AreaPath: "OpenHackDevOpsT2"
           IterationPath: "Sprint 1"
           GithubToken: "GithubToken"
           WorkflowFileName: "error.yml"
