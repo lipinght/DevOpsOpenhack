@@ -29,7 +29,7 @@ jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work i
     - name: Build
       run: dotnet build --no-restore ./apis/poi/web/poi.csproj
     - name: Test
-      run: dotnet test --no-build --verbosity normal ./apis/poi/tests/UnitTests/UnitTests.csproj
+      run: dotnet test --verbosity normal ./apis/poi/tests/UnitTests/UnitTests.csproj
     - name: The Build has failed #start of errorhandling
       uses: stefanstranger/azuredevops-bug-action@1.1
       if: failure()
