@@ -1,20 +1,20 @@
-name: buildPOIapi
+name: buildPOIapi #name of the workflow
 
 on:
-  push:
+  push: #when we push any changes to the POI code, triggers workflow to run
     branches: [ master ]
     paths: 
       - 'apis/poi/**'
       - '.github/workflows/dotnet.yml'
   
-  pull_request:
+  pull_request:  #when we pull any changes to the POI code, triggers workflow to run
      branches: [ master ]
      paths: 
       - 'apis/poi/**'
       - '.github/workflows/dotnet.yml'
 
-jobs:
-  build:
+jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work item on failure.
+  build-and-Test: 
 
     runs-on: ubuntu-latest
 
@@ -25,7 +25,7 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ./apis/poi/web/poi.csproj #added to run the job
     - name: Build
       run: dotnet build --no-restore
     - name: Test
