@@ -23,7 +23,7 @@ jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work i
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 3.1.202
     - name: Restore dependencies
       run: dotnet restore ./apis/poi/web/poi.csproj #added to run the job
     - name: Build
