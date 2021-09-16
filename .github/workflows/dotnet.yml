@@ -91,9 +91,9 @@ jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work i
     steps:     
       - uses: actions/checkout@v2
       - name: Test Stagging
-       #  run: ./polling.ps1 -Uri https://openhackxwt4lo49poi-staging.azurewebsites.net/api/healthcheck/poi  
+        run: ./polling.ps1 -Uri https://openhackxwt4lo49poi-staging.azurewebsites.net/api/healthcheck/poi  
     
-      - name: Swap to Production
+      # - name: Swap to Production
       #  run: |
        # az webapp deployment slot swap -g ${{ env.rg-name }} -n ${{ env.app-name }} -s staging
        # url=$(az webapp show -g ${{ env.rg-name }} -n ${{ env.app-name }} --query "defaultHostName" -o tsv)
