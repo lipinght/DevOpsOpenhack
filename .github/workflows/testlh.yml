@@ -1,0 +1,33 @@
+name: testlh #name of the workflow
+
+env:
+  AZURE_WEBAPP_NAME: openhackxwt4lo49poi
+  API_NAME: api-poi
+  WORKFLOW_NAME: dotnet.yml
+  APP_NAME: poi
+
+on:
+  push: #when we push any changes to the POI code, triggers workflow to run
+    branches: [ master ]
+    paths: 
+      - 'apis/poi/**'
+      - '.github/workflows/dotnet.yml'
+
+  pull_request:  #when we pull any changes to the POI code, triggers workflow to run
+     branches: [ master ]
+     paths: 
+      - 'apis/poi/**'
+      - '.github/workflows/dotnet.yml'
+      
+  swaptoPROD:
+    
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: pwsh
+    
+    steps:     
+      - uses: actions/checkout@v1
+      - name: Test Stagging
+        run: | 
+         ./polling.ps1 -Uri https://openhackxwt4lo49poi-staging.azurewebsites.net/api/healthcheck/poi; 
