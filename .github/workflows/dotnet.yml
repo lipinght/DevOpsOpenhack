@@ -1,12 +1,15 @@
 name: buildPOIapi #name of the workflow
 
+env:
+  AZURE_WEBAPP_NAME: openhackxwt4lo49poi
+
 on:
   push: #when we push any changes to the POI code, triggers workflow to run
     branches: [ master ]
     paths: 
       - 'apis/poi/**'
       - '.github/workflows/dotnet.yml'
-  
+
   pull_request:  #when we pull any changes to the POI code, triggers workflow to run
      branches: [ master ]
      paths: 
@@ -61,3 +64,13 @@ jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work i
       - run: |
           docker build ./apis/poi/web/ -t openhackxwt4lo49acr.azurecr.io/devopsoh/api-poi:${{github.run_number}}
           docker push openhackxwt4lo49acr.azurecr.io/devopsoh/api-poi:${{github.run_number}}
+
+      - name: 'Deploy to Azure Web App for Container'
+        uses: azure/webapps-deploy@v2
+   
+        with: 
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_POI }}
+          app-name: ${{ env.AZURE_WEBAPP_NAME }} 
+          images: openhackxwt4lo49acr.azurecr.io/devopsoh/api-poi:latest
+#         startup-command: 'npm start'    # Include start up command to start the app container
+
