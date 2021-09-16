@@ -71,6 +71,6 @@ jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work i
         with: 
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_POI }}
           app-name: ${{ env.AZURE_WEBAPP_NAME }} 
-          images: openhackxwt4lo49acr.azurecr.io/devopsoh/api-poi:latest
+          images: openhackxwt4lo49acr.azurecr.io/devopsoh/api-poi:${{github.run_number}}
 #         startup-command: 'npm start'    # Include start up command to start the app container
 
