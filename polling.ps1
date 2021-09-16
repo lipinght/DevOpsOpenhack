@@ -16,3 +16,6 @@ while($true) {
   Write-Output $output
   Start-Sleep -Seconds 1
 }
+
+
+# .\polling.ps1 -Uri https://openhackxwt4lo49poi-staging.azurewebsites.net/api/healthcheck/poi
