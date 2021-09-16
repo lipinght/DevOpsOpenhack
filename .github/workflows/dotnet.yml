@@ -1,4 +1,4 @@
-name: buildPOIapi #name of the workflow
+name: buildPOIapi #name of the workflow 
 
 env:
   AZURE_WEBAPP_NAME: openhackxwt4lo49poi
