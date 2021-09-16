@@ -89,7 +89,8 @@ jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work i
     steps:     
       - uses: actions/checkout@v1
       - name: Test Stagging
-        run: ./polling.ps1 -Uri https://openhackxwt4lo49poi-staging.azurewebsites.net/api/healthcheck/poi
+        run:  |
+         ./polling.ps1 -Uri https://openhackxwt4lo49poi-staging.azurewebsites.net/api/healthcheck/poi
         shell: pwsh
         
     
