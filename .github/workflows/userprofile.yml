@@ -55,12 +55,10 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
     - name: npm install, build, and test
       run: |
-        # Build and test the project, then
-        # deploy to Azure Web App.
-        npm ci # FOR CI NPM INSTALLS, CI IS USED npm Docs (npmjs.com)
-        npm run build --if-present
-        npm run test --if-present
-
+        npm ci 
+        npm run build
+        npm run test
+        
     - name: The Build has failed #start of errorhandling
       uses: stefanstranger/azuredevops-bug-action@1.1
       if: failure()
