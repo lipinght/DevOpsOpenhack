@@ -10,8 +10,8 @@ on:
   push:
     branches: [ master ]
     paths: 
-      - 'apis/${{ env.APP_NAME }}/**'
-      - '.github/workflows/${{ env.WORKFLOW_NAME }}'
+      - 'apis/trips/**'
+      - '.github/workflows/tripsgo.yml'
   pull_request:
     branches: [ master ]
     paths: 
