@@ -49,7 +49,7 @@ jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work i
           AreaPath: "OpenHackDevOpsT2\\Automation"
           IterationPath: "OpenHackDevOpsT2\\Sprint 1"
           GithubToken: "GithubToken"
-          WorkflowFileName: "${{ WORKFLOW_NAME }}"
+          WorkflowFileName: ${{ env.WORKFLOW_NAME }}
       env:
           PAT: ${{ secrets.PAT}}
           GithubToken: ${{ secrets.githubtoken}}
