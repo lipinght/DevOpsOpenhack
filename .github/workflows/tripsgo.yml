@@ -31,7 +31,7 @@ jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work i
         go-version: 1.17 # check ? 
         
     - name: Restore dependencies
-      run: go get ./apis/trips/main.go  #added to run the job ( get instead of restore) 
+      run: go get ./apis/trips/  #added to run the job ( get instead of restore) 
 
     - name: Build
       run: go build -v ./apis/trips/main.go
