@@ -31,7 +31,7 @@ jobs:
     steps:  
     - uses: actions/checkout@v1
     - name: Test Stagging
-      run: ./polling.ps1 -Uri https://openhackxwt4lo49poi-staging.azurewebsites.net/api/healthcheck/poi3
+      run: ./polling.ps1 -Uri https://openhackxwt4lo49poi-staging.azurewebsites.net/api/healthcheck/poi
       shell: pwsh
     
    
@@ -41,6 +41,7 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         
     - name: Swap Staging to Prod
+      if: success()
       run: | 
           az webapp deployment slot swap -g ${{ env.rg-name }} -n ${{ env.AZURE_WEBAPP_NAME }} -s staging
           echo "Log Swapped"
