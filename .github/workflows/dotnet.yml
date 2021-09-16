@@ -46,3 +46,18 @@ jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work i
       env:
           PAT: ${{ secrets.PAT}}
           GithubToken: ${{ secrets.githubtoken}}
+          
+  buildcontainer: 
+      needs: build-and-Test
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v2 
+      - uses: azure/docker-login@v1
+        with:
+          login-server: openhackxwt4lo49acr.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - run: |
+          docker build ./apis/poi/web/ -t openhackxwt4lo49acr.azurecr.io/devopsoh/api-poi:${{github.run_number}}
+          docker push openhackxwt4lo49acr.azurecr.io/devopsoh/api-poi:${{github.run_number}}
