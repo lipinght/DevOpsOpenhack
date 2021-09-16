@@ -53,11 +53,10 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ env.NODE_VERSION }}
-    - name: npm install, build, and test
-      run: |
-        npm ci 
-        npm run build
-        npm run test
+    #- name: npm install, build, and test
+    - run: npm ci 
+    - run: npm run build
+    - run: npm run test
         
     - name: The Build has failed #start of errorhandling
       uses: stefanstranger/azuredevops-bug-action@1.1
