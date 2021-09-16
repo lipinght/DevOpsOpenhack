@@ -1,0 +1,43 @@
+name: SwapDeployment
+
+env:
+  AZURE_WEBAPP_NAME: openhackxwt4lo49poi
+  API_NAME: api-poi
+  WORKFLOW_NAME: dotnet.yml
+  APP_NAME: poi
+  rg-name: openhackxwt4lo49rg
+
+on:
+  push: #when we push any changes to the POI code, triggers workflow to run
+    branches: [ master ]
+    paths: 
+      - 'apis/poi/**'
+      - '.github/workflows/dotnet.yml'
+
+  pull_request:  #when we pull any changes to the POI code, triggers workflow to run
+     branches: [ master ]
+     paths: 
+      - 'apis/poi/**'
+      - '.github/workflows/dotnet.yml'
+
+jobs: 
+  swaptoPROD:
+     
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash 
+    
+    steps:  
+    
+    - name: Login via Azure CLI
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: Swap Staging to Prod
+        run:| 
+          az webapp deployment slot swap -g ${{ env.rg-name }} -n ${{ env.AZURE_WEBAPP_NAME }} -s staging
+          echo "Log Swapped"
+          
+# ./polling.ps1 -Uri https://openhackxwt4lo49poi-staging.azurewebsites.net/api/healthcheck/poi; 
