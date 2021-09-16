@@ -11,13 +11,13 @@ on:
     branches: [ master ]
     paths: 
       - 'apis/poi/**'
-      - '.github/workflows/dotnet.yml'
+      - '.github/workflows/testlh.yml'
 
   pull_request:  #when we pull any changes to the POI code, triggers workflow to run
      branches: [ master ]
      paths: 
       - 'apis/poi/**'
-      - '.github/workflows/dotnet.yml'
+      - '.github/workflows/testlh.yml'
  
 jobs:
   swaptoPROD:
