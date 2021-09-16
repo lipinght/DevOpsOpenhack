@@ -72,11 +72,10 @@ jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work i
           docker build ./apis/${{ env.APP_NAME }}/web/ -t openhackxwt4lo49acr.azurecr.io/devopsoh/${{ env.API_NAME }}:${{github.run_number}}
           docker push openhackxwt4lo49acr.azurecr.io/devopsoh/${{ env.API_NAME }}:${{github.run_number}}
 
-      - name: 'Deploy to Azure Web App for Container'
+      - name: 'STAGING Deploy to Azure Web App for Container'
         uses: azure/webapps-deploy@v2
-   
         with: 
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_POI}}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_POI_STG}}
           app-name: ${{ env.AZURE_WEBAPP_NAME }} 
           images: openhackxwt4lo49acr.azurecr.io/devopsoh/${{ env.API_NAME }}:${{github.run_number}}
           slot-name: staging
