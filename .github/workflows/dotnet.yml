@@ -82,11 +82,20 @@ jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work i
           
   buildcontainerPROD:
     needs: buildcontainerSTAGING
+    
     runs-on: ubuntu-latest
-    steps:
-      -name 'Test Staging'
-     run: #POWERSHELL TO GO HERE
+    defaults:
+      run:
+        shell: powershell 
+    
+    steps:     
+      - uses: actions/checkout@v2
+      - name: Test Stagging
+       #  run: ./polling.ps1 -Uri https://openhackxwt4lo49poi-staging.azurewebsites.net/api/healthcheck/poi
+    
+      - name: Swap to Production
+      #  run: |
+       # az webapp deployment slot swap -g ${{ env.rg-name }} -n ${{ env.app-name }} -s staging
+       # url=$(az webapp show -g ${{ env.rg-name }} -n ${{ env.app-name }} --query "defaultHostName" -o tsv)
+       # echo "::set-output name=url::http://$url"
       
-      -name 'Swap Staging to Prod'
-#         startup-command: 'npm start'    # Include start up command to start the app container
-
