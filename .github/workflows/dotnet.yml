@@ -2,6 +2,9 @@ name: buildPOIapi #name of the workflow
 
 env:
   AZURE_WEBAPP_NAME: openhackxwt4lo49poi
+  API_NAME: api-poi
+  WORKFLOW_NAME: dotnet.yml
+  APP_NAME: poi
 
 on:
   push: #when we push any changes to the POI code, triggers workflow to run
@@ -20,6 +23,10 @@ jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work i
   build-and-Test: 
 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: apis/poi 
 
     steps:
     - uses: actions/checkout@v2
@@ -28,13 +35,13 @@ jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work i
       with:
         dotnet-version: 3.1.202
     - name: Restore dependencies
-      run: dotnet restore ./apis/poi/web/poi.csproj #added to run the job
+      run: dotnet restore ./web/poi.csproj #added to run the job
     - name: Build
-      run: dotnet build --no-restore ./apis/poi/web/poi.csproj
+      run: dotnet build --no-restore ./web/poi.csproj
     - name: Build-Test
-      run: dotnet build ./apis/poi/tests/UnitTests/UnitTests.csproj
+      run: dotnet build ./tests/UnitTests/UnitTests.csproj
     - name: Test
-      run: dotnet test --no-build --verbosity normal ./apis/poi/tests/UnitTests/UnitTests.csproj
+      run: dotnet test --no-build --verbosity normal ./tests/UnitTests/UnitTests.csproj
     - name: The Build has failed #start of errorhandling
       uses: stefanstranger/azuredevops-bug-action@1.1
       if: failure()
@@ -45,7 +52,7 @@ jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work i
           AreaPath: "OpenHackDevOpsT2\\Automation"
           IterationPath: "OpenHackDevOpsT2\\Sprint 1"
           GithubToken: "GithubToken"
-          WorkflowFileName: "error.yml"
+          WorkflowFileName: ${{ env.WORKFLOW_NAME }}
       env:
           PAT: ${{ secrets.PAT}}
           GithubToken: ${{ secrets.githubtoken}}
@@ -62,15 +69,15 @@ jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work i
           password: ${{ secrets.ACR_PASSWORD }}
 
       - run: |
-          docker build ./apis/poi/web/ -t openhackxwt4lo49acr.azurecr.io/devopsoh/api-poi:${{github.run_number}}
-          docker push openhackxwt4lo49acr.azurecr.io/devopsoh/api-poi:${{github.run_number}}
+          docker build ./apis/${{ env.APP_NAME }}/web/ -t openhackxwt4lo49acr.azurecr.io/devopsoh/${{ env.API_NAME }}:${{github.run_number}}
+          docker push openhackxwt4lo49acr.azurecr.io/devopsoh/${{ env.API_NAME }}:${{github.run_number}}
 
       - name: 'Deploy to Azure Web App for Container'
         uses: azure/webapps-deploy@v2
    
         with: 
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_POI }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_POI}}
           app-name: ${{ env.AZURE_WEBAPP_NAME }} 
-          images: openhackxwt4lo49acr.azurecr.io/devopsoh/api-poi:${{github.run_number}}
+          images: openhackxwt4lo49acr.azurecr.io/devopsoh/${{ env.API_NAME }}:${{github.run_number}}
 #         startup-command: 'npm start'    # Include start up command to start the app container
 
