@@ -15,8 +15,8 @@ on:
   pull_request:
     branches: [ master ]
     paths: 
-      - 'apis/${{ env.APP_NAME }}/**'
-      - '.github/workflows/${{ env.WORKFLOW_NAME }}'
+      - 'apis/trips/**'
+      - '.github/workflows/tripsgo.yml'
 
 jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work item on failure.
 
