@@ -56,7 +56,7 @@ jobs:
     #- name: npm install, build, and test
     - run: npm ci 
     - run: npm build
-    - run: npm test
+    - run: npm run test
         
     - name: The Build has failed #start of errorhandling
       uses: stefanstranger/azuredevops-bug-action@1.1
