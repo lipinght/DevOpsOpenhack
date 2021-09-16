@@ -36,7 +36,7 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         
     - name: Swap Staging to Prod
-        run:| 
+      run: | 
           az webapp deployment slot swap -g ${{ env.rg-name }} -n ${{ env.AZURE_WEBAPP_NAME }} -s staging
           echo "Log Swapped"
           
