@@ -22,6 +22,11 @@ jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work i
 
   build-and-Test: 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: apis/trips 
+        
     steps:
     - uses: actions/checkout@v2
 
@@ -31,13 +36,10 @@ jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work i
         go-version: 1.17 # check ? 
         
     - name: Restore dependencies
-      run: go get ./apis/trips/  #added to run the job ( get instead of restore) 
-
-    - name: Build
-      run: go build -v ./apis/trips/main.go
+      run: go get  #added to run the job ( get instead of restore) 
 
     - name: Test
-      run: go test -v ./apis/trips/tripgo -run Unit
+      run: go test 
 
     - name: The Build has failed #start of errorhandling
       uses: stefanstranger/azuredevops-bug-action@1.1
