@@ -30,6 +30,12 @@ jobs:
     
     steps:  
     
+    - name: Test Stagging
+      run: ./polling.ps1 -Uri https://openhackxwt4lo49poi-staging.azurewebsites.net/api/healthcheck/poi
+      shell: pwsh
+    
+  
+    
     - name: Login via Azure CLI
       uses: azure/login@v1
       with:
@@ -42,5 +48,9 @@ jobs:
           
     - name: az cli logout  
       run: az logout
-          
+    
+    - name: Test pRODUCTION
+      run: ./polling.ps1 -Uri https://openhackxwt4lo49poi.azurewebsites.net/api/healthcheck/poi
+      shell: pwsh
+    
 # ./polling.ps1 -Uri https://openhackxwt4lo49poi-staging.azurewebsites.net/api/healthcheck/poi; 
