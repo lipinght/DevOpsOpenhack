@@ -46,13 +46,20 @@ jobs:
           az webapp deployment slot swap -g ${{ env.rg-name }} -n ${{ env.AZURE_WEBAPP_NAME }} -s staging
           echo "Log Swapped"
           
-    - name: az cli logout  
-      run: az logout
     
     - name: Test pRODUCTION
       run: ./polling.ps1 -Uri https://openhackxwt4lo49poi.azurewebsites.net/api/healthcheck/poi
       shell: pwsh
-    
+      
+    - name: swap revert
+      if: failure()
+      run: | 
+          az webapp deployment slot swap -g ${{ env.rg-name }} -n ${{ env.AZURE_WEBAPP_NAME }} -s staging
+          echo "Log Swapped"
+      
+            
+    - name: az cli logout  
+      run: az logout
       
       
     
