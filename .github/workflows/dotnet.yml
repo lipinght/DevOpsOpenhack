@@ -80,18 +80,44 @@ jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work i
           images: openhackxwt4lo49acr.azurecr.io/devopsoh/${{ env.API_NAME }}:${{github.run_number}}
           slot-name: staging
           
-  swaptoPROD:
-    needs: buildcontainerSTAGING
-    
-    runs-on: ubuntu-latest
 
+  swaptoPROD:
+     
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash 
     
-    steps:     
-      - uses: actions/checkout@v1
-      - name: Test Stagging
-        run:  |
-         ./polling.ps1 -Uri https://openhackxwt4lo49poi-staging.azurewebsites.net/api/healthcheck/poi
-        shell: pwsh
+    steps:  
+    - uses: actions/checkout@v1
+    - name: Test Stagging
+      run: ./polling.ps1 -Uri https://openhackxwt4lo49poi-staging.azurewebsites.net/api/healthcheck/poi
+      shell: pwsh
+    
+   
+    - name: Login via Azure CLI
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
         
+    - name: Swap Staging to Prod
+      if: success()
+      run: | 
+          az webapp deployment slot swap -g ${{ env.rg-name }} -n ${{ env.AZURE_WEBAPP_NAME }} -s staging
+          echo "Log Swapped"
+          
     
+    - name: Test pRODUCTION
+      run: ./polling.ps1 -Uri https://openhackxwt4lo49poi.azurewebsites.net/api/healthcheck/poi
+      shell: pwsh
+      
+    - name: swap revert
+      if: failure()
+      run: | 
+          az webapp deployment slot swap -g ${{ env.rg-name }} -n ${{ env.AZURE_WEBAPP_NAME }} -s staging
+          echo "Log Swapped"
+      
+            
+    - name: az cli logout  
+      run: az logout
            
