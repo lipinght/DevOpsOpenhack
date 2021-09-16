@@ -48,7 +48,7 @@ jobs:
           
     
     - name: Test pRODUCTION
-      run: ./polling.ps1 -Uri https://openhackxwt4lo49poi.azurewebsites.net/api/healthcheck/poi
+      run: ./polling.ps1 -Uri https://openhackxwt4lo49poi.azurewebsites.net/api/healthcheck/poi4
       shell: pwsh
       
     - name: swap revert
