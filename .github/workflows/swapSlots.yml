@@ -26,16 +26,15 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        shell: pwsh 
+        shell: bash 
     
     steps:  
-    
+    - uses: actions/checkout@v1
     - name: Test Stagging
       run: ./polling.ps1 -Uri https://openhackxwt4lo49poi-staging.azurewebsites.net/api/healthcheck/poi
       shell: pwsh
     
-  
-    
+   
     - name: Login via Azure CLI
       uses: azure/login@v1
       with:
