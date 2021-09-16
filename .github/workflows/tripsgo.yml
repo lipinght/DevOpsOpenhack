@@ -1,0 +1,79 @@
+name: buildtripsapi #name of the workflow
+
+env:
+  AZURE_WEBAPP_NAME: openhackxwt4lo49trips
+  API_NAME: api-trips
+  WORKFLOW_NAME: tripsgo.yml
+  APP_NAME: trips
+  
+on:
+  push:
+    branches: [ master ]
+    paths: 
+      - 'apis/${{ env.APP_NAME }}/**'
+      - '.github/workflows/${{ env.WORKFLOW_NAME }}'
+  pull_request:
+    branches: [ master ]
+    paths: 
+      - 'apis/${{ env.APP_NAME }}/**'
+      - '.github/workflows/${{ env.WORKFLOW_NAME }}'
+
+jobs: #jobs that we need to run to 1: Build & Test the Code   2: create a work item on failure.
+
+  build-and-Test: 
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17 # check ? 
+        
+    - name: Restore dependencies
+      run: go get ./apis/trips/main.go  #added to run the job ( get instead of restore) 
+
+    - name: Build
+      run: go build -v ./apis/trips/main.go
+
+    - name: Test
+      run: go test -v ./apis/trips/tripgo -run Unit
+
+    - name: The Build has failed #start of errorhandling
+      uses: stefanstranger/azuredevops-bug-action@1.1
+      if: failure()
+      with:
+          OrganizationName: "openhackdevopst2harachum"
+          PAT: "PAT"
+          ProjectName: "OpenHackDevOpsT2"
+          AreaPath: "OpenHackDevOpsT2\\Automation"
+          IterationPath: "OpenHackDevOpsT2\\Sprint 1"
+          GithubToken: "GithubToken"
+          WorkflowFileName: "${{ WORKFLOW_NAME }}"
+      env:
+          PAT: ${{ secrets.PAT}}
+          GithubToken: ${{ secrets.githubtoken}}
+
+  buildcontainer: 
+      needs: build-and-Test
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v2 
+      - uses: azure/docker-login@v1
+        with:
+          login-server: openhackxwt4lo49acr.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+          
+      - run: |
+          docker build ./apis/${{ env.APP_NAME }}/ -t openhackxwt4lo49acr.azurecr.io/devopsoh/${{ env.API_NAME }}:${{github.run_number}}
+          docker push openhackxwt4lo49acr.azurecr.io/devopsoh/${{ env.API_NAME }}:${{github.run_number}}  
+          
+      - name: 'Deploy to Azure Web App for Container'
+        uses: azure/webapps-deploy@v2
+   
+        with: 
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_TRIPS }}
+          app-name: ${{ env.AZURE_WEBAPP_NAME }} 
+          images: openhackxwt4lo49acr.azurecr.io/devopsoh/${{ env.API_NAME }}:${{github.run_number}}
+
