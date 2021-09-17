@@ -5,7 +5,8 @@ env:
   API_NAME: api-poi
   WORKFLOW_NAME: dotnet.yml
   APP_NAME: poi
-
+  rg-name: openhackxwt4lo49rg
+  
 on:
   push: #when we push any changes to the POI code, triggers workflow to run
     branches: [ master ]
